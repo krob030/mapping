@@ -18,17 +18,17 @@ function createFeatures(earthquakeData) {
 
   function markerColor(mag) {
     if (mag <= 1) {
-      return "#FFA07A";
+      return "#CCFF00";
     } else if (mag <= 2) {
-      return "#E9967A";
+      return "#FFCC00";
     } else if (mag <= 3) {
-      return "#F08080";
+      return "#FF9900";
     } else if (mag <= 4) {
-      return "#CD5C5C";
+      return "#FF6600";
     } else if (mag <= 5) {
-      return "#DC143C";
+      return "#FF0000";
     } else {
-      return "#FF4500";
+      return "#660000";
     };
   }
   // Create a GeoJSON layer containing the features array on the earthquakeData object
@@ -37,7 +37,7 @@ function createFeatures(earthquakeData) {
     onEachFeature: onEachFeature,
     pointToLayer: function (feature, latlng) {
       return L.circleMarker(latlng, {
-        fillColor: markerColor(feature.properties.mag), fillOpacity: .8,
+        fillColor: markerColor(feature.properties.mag), fillOpacity: .9,
         stroke: false
       }).setRadius(feature.properties.mag * 5);
     },
@@ -90,26 +90,19 @@ function createMap(earthquakes) {
   }).addTo(myMap);
 
   // Set up the legend
-  var legend = L.control({ position: "bottomright" });
+  var legend = L.control({position: 'bottomright'});
+
   legend.onAdd = function () {
-    var div = L.DomUtil.create("div", "info legend");
-    magni = [0, 1, 2, 3, 4, 5];
-    var labels = [];
-
-    // Add min & max
-    var legendInfo = "<h1>Magnitude</h1>" +
-      "<div class=\"labels\">" +
-      "<div class=\"min\">" + limits[0] + "</div>" +
-      "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
-      "</div>";
-
-    div.innerHTML = legendInfo;
-
-    limits.forEach(function (limit, index) {
-      labels.push("<li style=\"background-color: " + markerColor[index] + "\"></li>");
-    });
-
-    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+  
+      var div = L.DomUtil.create('div', 'info legend'),
+          mag = [0, 1, 2, 3, 4, 5];
+          div.innerHTML = '<h3>Magnitude</h3>'
+    
+      for (var i = 0; i < mag.length; i++) {
+          div.innerHTML+=
+          '<i class="legend" style="background:' + mag[i] + '; markerColor:' + mag[i] + ';"></i> ' + 
+            mag[i] + (mag[i + 1] ? ' - ' + mag[i + 1] + '<br>' : ' + ');
+      }
     return div;
   };
 
